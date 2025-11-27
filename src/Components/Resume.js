@@ -1,82 +1,63 @@
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
+import { SectionWithHeader, InfoItem } from "../utils/components";
 
 const Resume = ({ data }) => {
+  // Memoize expensive list computations - must be called before any early returns
+  const educationList = useMemo(() => 
+    data?.education?.map((edu) => (
+      <InfoItem
+        key={edu.school}
+        title={edu.school}
+        subtitle={edu.degree}
+        date={edu.graduated}
+        description={edu.description}
+      />
+    )) || [], [data?.education]);
+  
+  const workList = useMemo(() =>
+    data?.work?.map((job) => (
+      <InfoItem
+        key={job.company}
+        title={job.company}
+        subtitle={job.title}
+        date={job.years}
+        description={job.description}
+      />
+    )) || [], [data?.work]);
+  
+  const skillsList = useMemo(() =>
+    data?.skills?.map((skill) => {
+      const className = `bar-expand ${skill.name.toLowerCase()}`;
+      return (
+        <li key={skill.name}>
+          <span style={{ width: skill.level }} className={className}></span>
+          <em>{skill.name}</em>
+        </li>
+      );
+    }) || [], [data?.skills]);
+
   if (!data) return null;
 
-  const skillmessage = data.skillmessage;
-  const education = data.education?.map((edu) => (
-    <div key={edu.school}>
-      <h3>{edu.school}</h3>
-      <p className="info">
-        {edu.degree} <span>&bull;</span>
-        <em className="date">{edu.graduated}</em>
-      </p>
-      <p>{edu.description}</p>
-    </div>
-  )) || [];
-  
-  const work = data.work?.map((job) => (
-    <div key={job.company}>
-      <h3>{job.company}</h3>
-      <p className="info">
-        {job.title}
-        <span>&bull;</span> <em className="date">{job.years}</em>
-      </p>
-      <p>{job.description}</p>
-    </div>
-  )) || [];
-  
-  const skills = data.skills?.map((skill) => {
-    const className = "bar-expand " + skill.name.toLowerCase();
-    return (
-      <li key={skill.name}>
-        <span style={{ width: skill.level }} className={className}></span>
-        <em>{skill.name}</em>
-      </li>
-    );
-  }) || [];
+  const { skillmessage } = data;
 
   return (
     <section id="resume">
-      <div className="row education">
-        <div className="three columns header-col">
-          <h1>
-            <span>Education</span>
-          </h1>
+      <SectionWithHeader headerTitle="Education" className="education">
+        <div className="row item">
+          <div className="twelve columns">{educationList}</div>
         </div>
+      </SectionWithHeader>
 
-        <div className="nine columns main-col">
-          <div className="row item">
-            <div className="twelve columns">{education}</div>
-          </div>
+      <SectionWithHeader headerTitle="Work" className="work">
+        {workList}
+      </SectionWithHeader>
+
+      <SectionWithHeader headerTitle="Skills" className="skill">
+        <p>{skillmessage}</p>
+        <div className="bars">
+          <ul className="skills">{skillsList}</ul>
         </div>
-      </div>
-
-      <div className="row work">
-        <div className="three columns header-col">
-          <h1>
-            <span>Work</span>
-          </h1>
-        </div>
-
-        <div className="nine columns main-col">{work}</div>
-      </div>
-
-      <div className="row skill">
-        <div className="three columns header-col">
-          <h1>
-            <span>Skills</span>
-          </h1>
-        </div>
-
-        <div className="nine columns main-col">
-          <p>{skillmessage}</p>
-
-          <div className="bars">
-            <ul className="skills">{skills}</ul>
-          </div>
-        </div>
-      </div>
+      </SectionWithHeader>
     </section>
   );
 };

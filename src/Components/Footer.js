@@ -1,15 +1,11 @@
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
+import { mapSocialNetworks } from "../utils";
 
 const Footer = ({ data }) => {
-  if (!data) return null;
+  // Memoize social networks - must be called before any early returns
+  const networks = useMemo(() => mapSocialNetworks(data?.social), [data?.social]);
 
-  const networks = data.social?.map((network) => (
-    <li key={network.name}>
-      <a href={network.url} aria-label={network.name} target="_blank" rel="noopener noreferrer">
-        <i className={network.className}></i>
-      </a>
-    </li>
-  )) || [];
+  if (!data) return null;
 
   return (
     <footer>

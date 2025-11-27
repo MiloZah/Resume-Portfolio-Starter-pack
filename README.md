@@ -50,6 +50,18 @@ Once all the formatting and data input is finalised, run `npm run build`. This w
 
 🚀 BOOM, you are now LIVE!!!
 
+## Optimization & Refactoring
+
+This codebase has been optimized for performance, SEO, and code quality. See **[OPTIMIZATION_DOCUMENTATION.md](./OPTIMIZATION_DOCUMENTATION.md)** for detailed documentation of all changes, including:
+
+- Performance optimizations (code splitting, lazy loading, memoization)
+- SEO improvements (meta tags, structured data, geo-location)
+- Code structure improvements (consolidated utilities, shared components)
+- React Hooks fixes and best practices
+- Server-side optimizations (caching, compression)
+
+All optimizations maintain the original design, animations, and functionality.
+
 ## Credits
 
 ##### Original Idea

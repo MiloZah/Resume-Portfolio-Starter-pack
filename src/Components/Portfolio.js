@@ -1,35 +1,37 @@
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
+import { OptimizedImage } from "../utils";
 
 const Portfolio = ({ data }) => {
-  if (!data || !data.projects) return null;
-
-  const projects = data.projects.map((project) => {
-    const projectImage = "images/portfolio/" + project.image;
-    return (
-      <div key={project.title} className="columns portfolio-item">
-        <div className="item-wrap">
-          <a href={project.url} title={project.title} aria-label={`View ${project.title} project`}>
-            <img 
-              alt={project.title} 
-              src={projectImage} 
-              loading="lazy"
-              width="400"
-              height="300"
-            />
-            <div className="overlay">
-              <div className="portfolio-item-meta">
-                <h5>{project.title}</h5>
-                <p>{project.category}</p>
+  // Memoize projects list - must be called before any early returns
+  const projects = useMemo(() => 
+    data?.projects?.map((project) => {
+      const projectImage = `images/portfolio/${project.image}`;
+      return (
+        <div key={project.title} className="columns portfolio-item">
+          <div className="item-wrap">
+            <a href={project.url} title={project.title} aria-label={`View ${project.title} project`}>
+              <OptimizedImage
+                alt={project.title}
+                src={projectImage}
+                width="400"
+                height="300"
+              />
+              <div className="overlay">
+                <div className="portfolio-item-meta">
+                  <h5>{project.title}</h5>
+                  <p>{project.category}</p>
+                </div>
               </div>
-            </div>
-            <div className="link-icon">
-              <i className="fa fa-link"></i>
-            </div>
-          </a>
+              <div className="link-icon">
+                <i className="fa fa-link"></i>
+              </div>
+            </a>
+          </div>
         </div>
-      </div>
-    );
-  });
+      );
+    }) || [], [data?.projects]);
+
+  if (!data?.projects) return null;
 
   return (
     <section id="portfolio">

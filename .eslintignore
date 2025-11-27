@@ -1,0 +1,5 @@
+# Netlify configuration files (not JavaScript/YAML)
+public/_headers
+public/_redirects
+public/.htaccess
+

@@ -1,4 +1,5 @@
-import React, { useState, memo, useCallback } from "react";
+import React, { useState, memo, useCallback, useMemo } from "react";
+import { SectionHeader } from "../utils";
 
 const Contact = ({ data }) => {
   const [name, setName] = useState("");
@@ -6,19 +7,17 @@ const Contact = ({ data }) => {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
 
-  if (!data) return null;
+  // Memoize address formatting - must be called before any early returns
+  const formattedAddress = useMemo(() => {
+    if (!data?.address) return '';
+    const { street, city, state, zip } = data.address;
+    return `${street}${city ? `, ${city}` : ''}${state ? ` ${state}` : ''}${zip ? ` ${zip}` : ''}`.trim();
+  }, [data?.address]);
 
-  const contactName = data.name;
-  const street = data.address?.street;
-  const city = data.address?.city;
-  const state = data.address?.state;
-  const zip = data.address?.zip;
-  const phone = data.phone;
-  const contactEmail = data.email;
-  const contactMessage = data.contactmessage;
-
+  // Memoize submit form callback - must be called before any early returns
   const submitForm = useCallback((e) => {
     e?.preventDefault();
+    const contactEmail = data?.email;
     if (contactEmail) {
       window.open(
         `mailto:${contactEmail}?subject=${encodeURIComponent(
@@ -28,21 +27,15 @@ const Contact = ({ data }) => {
         )}): ${encodeURIComponent(message)}`
       );
     }
-  }, [contactEmail, subject, name, email, message]);
+  }, [data?.email, subject, name, email, message]);
+
+  if (!data) return null;
+
+  const { name: contactName, email: contactEmail, phone, contactmessage: contactMessage } = data;
 
   return (
     <section id="contact">
-      <div className="row section-head">
-        <div className="two columns header-col">
-          <h1>
-            <span>Get In Touch.</span>
-          </h1>
-        </div>
-
-        <div className="ten columns">
-          <p className="lead">{contactMessage}</p>
-        </div>
-      </div>
+      <SectionHeader title="Get In Touch." subtitle={contactMessage} />
 
       <div className="row">
         <div className="eight columns">
@@ -129,8 +122,7 @@ const Contact = ({ data }) => {
               {contactEmail}
               <br />
               <br />
-              {street} <br />
-              {city}, {state} {zip}
+              {formattedAddress}
               <br />
               <span>{phone}</span>
             </p>

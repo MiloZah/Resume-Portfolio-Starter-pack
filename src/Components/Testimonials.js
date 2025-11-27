@@ -1,16 +1,18 @@
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 
 const Testimonials = ({ data }) => {
-  if (!data || !data.testimonials) return null;
+  // Memoize testimonials list - must be called before any early returns
+  const testimonials = useMemo(() =>
+    data?.testimonials?.map((testimonial) => (
+      <li key={testimonial.user}>
+        <blockquote>
+          <p>{testimonial.text}</p>
+          <cite>{testimonial.user}</cite>
+        </blockquote>
+      </li>
+    )) || [], [data?.testimonials]);
 
-  const testimonials = data.testimonials.map((testimonial) => (
-    <li key={testimonial.user}>
-      <blockquote>
-        <p>{testimonial.text}</p>
-        <cite>{testimonial.user}</cite>
-      </blockquote>
-    </li>
-  ));
+  if (!data?.testimonials) return null;
 
   return (
     <section id="testimonials">

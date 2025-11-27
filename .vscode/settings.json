@@ -1,0 +1,19 @@
+{
+  "yaml.schemas": {},
+  "yaml.customTags": [],
+  "files.associations": {
+    "_headers": "plaintext",
+    "_redirects": "plaintext"
+  },
+  "yaml.validate": true,
+  "files.exclude": {
+    "**/_headers": false
+  },
+  "cspell.words": [
+    "nosniff"
+  ],
+  "cspell.enableFileTypes": [
+    "plaintext"
+  ]
+}
+

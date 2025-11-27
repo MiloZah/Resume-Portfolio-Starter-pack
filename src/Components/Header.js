@@ -1,20 +1,15 @@
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 import TypeWriter from "react-typewriter";
+import { mapSocialNetworks } from "../utils";
 
 const Header = ({ data }) => {
+  // Memoize social networks - must be called before any early returns
+  const networks = useMemo(() => mapSocialNetworks(data?.social), [data?.social]);
+
   if (!data) return null;
 
-  const name = data.name;
-  const occupation = data.occupation;
-  const description = data.description;
-  const city = data.address?.city;
-  const networks = data.social?.map((network) => (
-    <li key={network.name}>
-      <a href={network.url} aria-label={network.name} target="_blank" rel="noopener noreferrer">
-        <i className={network.className}></i>
-      </a>
-    </li>
-  )) || [];
+  const { name, occupation, description, address } = data;
+  const city = address?.city;
 
   return (
     <header id="home">

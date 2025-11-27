@@ -1,28 +1,24 @@
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
+import { OptimizedImage, formatAddress } from "../utils";
 
 const About = ({ data }) => {
+  // Memoize address formatting - must be called before any early returns
+  const formattedAddress = useMemo(() => formatAddress(data?.address), [data?.address]);
+
   if (!data) return null;
 
-  const name = data.name;
-  const profilepic = "images/" + data.image;
-  const bio = data.bio;
-  const street = data.address.street;
-  const city = data.address.city;
-  const state = data.address.state;
-  const zip = data.address.zip;
-  const phone = data.phone;
-  const email = data.email;
-  const resumeDownload = data.resumedownload;
+  const { name, image, bio, phone, email } = data;
+  const resumeDownload = data['resumedownload'];
+  const profilePic = `images/${image}`;
 
   return (
     <section id="about">
       <div className="row">
         <div className="three columns">
-          <img
+          <OptimizedImage
             className="profile-pic"
-            src={profilepic}
-            alt={`${name}'s Profile Picture`}
-            loading="lazy"
+            src={profilePic}
+            alt={name}
             width="200"
             height="200"
           />
@@ -37,11 +33,7 @@ const About = ({ data }) => {
               <p className="address">
                 <span>{name}</span>
                 <br />
-                <span>
-                  {street}
-                  <br />
-                  {city} {state}, {zip}
-                </span>
+                <span>{formattedAddress}</span>
                 <br />
                 <span>{phone}</span>
                 <br />
