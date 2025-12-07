@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location (update with your actual domain)
-Sitemap: https://www.papareact.com/sitemap.xml
+Sitemap: https://www.miloslawfostowicz.dev/sitemap.xml
 
 # Disallow admin or private areas if any
 # Disallow: /admin/
