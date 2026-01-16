@@ -1,6 +1,6 @@
 # Miloslaw React JS Resume Starter Pack and Digital Portfolio
 
-![Miloslaw React JS Portfolio Starter Pack](resume-screenshot.jpg?raw=true "PAPA React JS Portfolio Stater Pack ")
+![Miloslaw React JS Portfolio Starter Pack](resume-screenshot.jpg?raw=true "Miloslaw JS Portfolio Stater Pack ")
 
 ### <a href="https://669e9d080c86fb1064954aae--soft-begonia-4eba06.netlify.app/">LIVE DEMO</a>
 
