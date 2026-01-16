@@ -1,6 +1,6 @@
-# PAPA React JS Resume Starter Pack and Digital Portfolio
+# Miloslaw React JS Resume Starter Pack and Digital Portfolio
 
-![PAPA React JS Portfolio Starter Pack](resume-screenshot.jpg?raw=true "PAPA React JS Portfolio Stater Pack ")
+![Miloslaw React JS Portfolio Starter Pack](resume-screenshot.jpg?raw=true "PAPA React JS Portfolio Stater Pack ")
 
 ### <a href="https://669e9d080c86fb1064954aae--soft-begonia-4eba06.netlify.app/">LIVE DEMO</a>
 
@@ -18,9 +18,9 @@ Next, you will need to run the following command in the Terminal to clone the re
 
 `git clone https://github.com/sonnysangha/Resume-Portfolio-Starter-pack.git`
 
-## 3. Install Dependancies
+## 3. Install Dependencies
 
-Next, you need to install all the dependancies using:
+Next, you need to install all the dependencies using:
 
 `npm install`
 
@@ -28,9 +28,22 @@ Once this is done, you can start the app with:
 
 `npm start`
 
+## Contact form email
+
+The contact form sends email through the `/api/contact` endpoint.
+
+Local development (Express):
+1. Copy `.env.example` to `.env` and fill in `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `ADMIN_EMAIL` (optional: `SMTP_SECURE`, `MAIL_FROM`, `ALLOWED_ORIGINS`) or set them in your shell.
+2. Start the API server with `npm run server` (uses `node --env-file=.env`, defaults to port 5000).
+
+Netlify deployment (Functions):
+1. The `netlify.toml` rewrite routes `/api/*` to `/.netlify/functions/:splat`.
+2. The function lives at `netlify/functions/contact.js`.
+3. Set the same SMTP environment variables (including `ADMIN_EMAIL`) in Netlify site settings. Optional: `ALLOWED_ORIGINS` for an origin allowlist.
+
 ## 4. Fill in your personal info
 
-To populate the website with all of your own data, open the public/resumeData.json file and simply replace the data in there with your own. Images for the porfolio section are to be put in the public/images/portfolio folder.
+To populate the website with all of your own data, open the public/resumeData.json file and simply replace the data in there with your own. Images for the portfolio section are to be put in the public/images/portfolio folder.
 
 ## 5. (OPTIONAL) Replacing images and/or fonts
 
@@ -48,13 +61,14 @@ Once all the formatting and data input is finalised, run `npm run build`. This w
 4. Simply Drag and drop the 'Build' Folder into the designated upload space
 5. The app will begin deploying & the deployment URL will be presented!
 
-🚀 BOOM, you are now LIVE!!!
+đźš€ BOOM, you are now LIVE!!!
 
 ## Optimization & Refactoring
 
 This codebase has been optimized for performance, SEO, and code quality. See **[OPTIMIZATION_DOCUMENTATION.md](./OPTIMIZATION_DOCUMENTATION.md)** for detailed documentation of all changes, including:
 
 - Performance optimizations (code splitting, lazy loading, memoization)
+- Dependency cleanup (removed axios/body-parser and unused react-typewriter; native fetch for contact form)
 - SEO improvements (meta tags, structured data, geo-location)
 - Code structure improvements (consolidated utilities, shared components)
 - React Hooks fixes and best practices
