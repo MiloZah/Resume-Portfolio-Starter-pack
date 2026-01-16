@@ -508,9 +508,10 @@ const Component = ({ data }) => {
 - SMTP transport was created on every request.
 
 **After:**
-- `npm start` runs the API and React dev server together (via `concurrently`).
+- `npm start` runs the API and React dev server together (via `concurrently`), using the local `react-scripts` binary.
 - SMTP transport is created once and reused (lazy init) for faster requests.
 - Email validation uses a shared, precompiled regex.
+- The API server handles port-in-use errors gracefully and can optionally retry on the next port.
 
 **Why:**
 - Reduce per-request overhead for the contact endpoint.
@@ -519,6 +520,7 @@ const Component = ({ data }) => {
 **Benefits:**
 - Lower latency for repeated submissions.
 - Faster local iteration (one command to run both servers).
+- Fewer startup failures due to PATH or port conflicts.
 
 ---
 

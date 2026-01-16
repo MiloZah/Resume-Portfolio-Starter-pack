@@ -1,7 +1,11 @@
 const express = require("express");
 const nodemailer = require("nodemailer");
 
-const PORT = process.env.PORT || 5000;
+const DEFAULT_PORT = 5000;
+const parsedPort = Number(process.env.PORT);
+const START_PORT = Number.isFinite(parsedPort) && parsedPort > 0 ? parsedPort : DEFAULT_PORT;
+const PORT_FALLBACK = process.env.PORT_FALLBACK === "true";
+const MAX_PORT_ATTEMPTS = 5;
 const REQUIRED_ENV = ["SMTP_HOST", "SMTP_USER", "SMTP_PASS", "ADMIN_EMAIL"];
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "")
   .split(",")
@@ -101,6 +105,31 @@ const getTransporter = () => {
   return { transporter: cachedTransporter };
 };
 
+const startServer = (port, attempt = 0) => {
+  const server = app.listen(port, () => {
+    console.log(`Contact API listening on port ${port}`);
+  });
+
+  server.on("error", (error) => {
+    if (error.code === "EADDRINUSE") {
+      if (PORT_FALLBACK && attempt < MAX_PORT_ATTEMPTS) {
+        const nextPort = port + 1;
+        console.warn(`Port ${port} is in use, trying ${nextPort}...`);
+        startServer(nextPort, attempt + 1);
+        return;
+      }
+
+      console.error(
+        `Port ${port} is already in use. Set PORT to a free port or stop the other process.`,
+      );
+      process.exit(1);
+    }
+
+    console.error("Server error:", error);
+    process.exit(1);
+  });
+};
+
 app.post("/api/contact", async (req, res) => {
   const origin = req.headers.origin;
   if (!isAllowedOrigin(origin)) {
@@ -169,6 +198,4 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Contact API listening on port ${PORT}`);
-});
+startServer(START_PORT);

@@ -33,8 +33,9 @@ Once this is done, you can start the app with (runs the React dev server + conta
 The contact form sends email through the `/api/contact` endpoint.
 
 Local development (Express):
-1. Copy `.env.example` to `.env` and fill in `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `ADMIN_EMAIL` (optional: `SMTP_SECURE`, `MAIL_FROM`, `ALLOWED_ORIGINS`) or set them in your shell.
+1. Copy `.env.example` to `.env` and fill in `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `ADMIN_EMAIL` (optional: `SMTP_SECURE`, `MAIL_FROM`, `ALLOWED_ORIGINS`, `PORT`, `PORT_FALLBACK`) or set them in your shell.
 2. Start the app with `npm start` (runs `server.js` + React dev server). Use `npm run server` to run only the API (uses `node --env-file=.env`, defaults to port 5000).
+   If `PORT_FALLBACK` is enabled, the API will try the next ports if the default is in use (update `proxy` in `package.json` if the port changes).
 
 Netlify deployment (Functions):
 1. The `netlify.toml` rewrite routes `/api/*` to `/.netlify/functions/:splat`.
