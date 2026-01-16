@@ -7,21 +7,21 @@
     "nodemailer": "^7.0.12",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-scripts": "^0.0.0"
+    "react-scripts": "^5.0.1"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
   "scripts": {
     "server": "node --env-file=.env server.js",
-    "start": "concurrently -k \"node --env-file=.env server.js\" \"node ./node_modules/react-scripts/bin/react-scripts.js start\"",
+    "start": "concurrently -k \"node --env-file=.env server.js\" \"node --env-file=.env scripts/start-react.js\"",
     "build": "react-scripts build",
     "build:analyze": "npm run build && npx source-map-explorer 'build/static/js/*.js'",
     "test": "react-scripts test",
     "security:test": "node scripts/security-scan.js",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:5001",
   "browserslist": {
     "production": [
       ">0.2%",

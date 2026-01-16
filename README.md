@@ -16,31 +16,25 @@ Firstly, you will need to download the latest version of Node by <a href="https:
 
 Next, you will need to run the following command in the Terminal to clone the repo onto your machine.
 
-`git clone https://github.com/sonnysangha/Resume-Portfolio-Starter-pack.git`
+`git clone https://github.com/`
 
-## 3. Install Dependencies
+## 3. Install Dependancies
 
 Next, you need to install all the dependencies using:
 
 `npm install`
 
-Once this is done, you can start the app with (runs the React dev server + contact API):
+Once this is done, you can start the app with:
 
 `npm start`
 
 ## Contact form email
 
-The contact form sends email through the `/api/contact` endpoint.
+The contact form sends email through the local Express API at `/api/contact`.
 
-Local development (Express):
-1. Copy `.env.example` to `.env` and fill in `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `ADMIN_EMAIL` (optional: `SMTP_SECURE`, `MAIL_FROM`, `ALLOWED_ORIGINS`, `PORT`, `PORT_FALLBACK`) or set them in your shell.
-2. Start the app with `npm start` (runs `server.js` + React dev server). Use `npm run server` to run only the API (uses `node --env-file=.env`, defaults to port 5000).
-   If `PORT_FALLBACK` is enabled, the API will try the next ports if the default is in use (update `proxy` in `package.json` if the port changes).
-
-Netlify deployment (Functions):
-1. The `netlify.toml` rewrite routes `/api/*` to `/.netlify/functions/:splat`.
-2. The function lives at `netlify/functions/contact.js`.
-3. Set the same SMTP environment variables (including `ADMIN_EMAIL`) in Netlify site settings. Optional: `ALLOWED_ORIGINS` for an origin allowlist.
+1. Copy `.env.example` to `.env` and set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `ADMIN_EMAIL` (optional: `SMTP_SECURE`, `MAIL_FROM`, `ALLOWED_ORIGINS`, `PORT`, `PORT_FALLBACK`, `REACT_PORT`).
+2. Start the app with `npm start` (runs API + React dev server). Use `npm run server` for API only.
+   If you change `REACT_PORT`, keep `ALLOWED_ORIGINS` aligned with the React origin and update `proxy` in `package.json` if the API port changes.
 
 ## 4. Fill in your personal info
 
@@ -62,14 +56,13 @@ Once all the formatting and data input is finalised, run `npm run build`. This w
 4. Simply Drag and drop the 'Build' Folder into the designated upload space
 5. The app will begin deploying & the deployment URL will be presented!
 
-đźš€ BOOM, you are now LIVE!!!
+🚀 BOOM, you are now LIVE!!!
 
 ## Optimization & Refactoring
 
 This codebase has been optimized for performance, SEO, and code quality. See **[OPTIMIZATION_DOCUMENTATION.md](./OPTIMIZATION_DOCUMENTATION.md)** for detailed documentation of all changes, including:
 
 - Performance optimizations (code splitting, lazy loading, memoization)
-- Dependency cleanup (removed axios/body-parser and unused react-typewriter; native fetch for contact form)
 - SEO improvements (meta tags, structured data, geo-location)
 - Code structure improvements (consolidated utilities, shared components)
 - React Hooks fixes and best practices

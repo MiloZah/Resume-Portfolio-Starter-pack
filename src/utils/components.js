@@ -37,8 +37,8 @@ export const SectionWithHeader = ({ headerTitle, children, className = "" }) => 
 /**
  * Reusable list item renderer for education/work
  */
-export const InfoItem = ({ title, subtitle, date, description, key }) => (
-  <div key={key}>
+export const InfoItem = ({ title, subtitle, date, description }) => (
+  <div>
     <h3>{title}</h3>
     <p className="info">
       {subtitle} <span>&bull;</span>

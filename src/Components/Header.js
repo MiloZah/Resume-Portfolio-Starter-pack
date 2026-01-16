@@ -1,6 +1,54 @@
-import React, { memo, useMemo } from "react";
-import TypeWriter from "react-typewriter";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import { mapSocialNetworks } from "../utils";
+
+const TypewriterText = memo(({ text, speed = 50, startDelay = 0 }) => {
+  const [displayText, setDisplayText] = useState("");
+
+  useEffect(() => {
+    if (!text) {
+      setDisplayText("");
+      return undefined;
+    }
+
+    const prefersReducedMotion = typeof window !== "undefined"
+      && window.matchMedia
+      && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      setDisplayText(text);
+      return undefined;
+    }
+
+    let index = 0;
+    let intervalId;
+    let timeoutId;
+
+    setDisplayText("");
+
+    const startTyping = () => {
+      intervalId = setInterval(() => {
+        index += 1;
+        setDisplayText(text.slice(0, index));
+        if (index >= text.length) {
+          clearInterval(intervalId);
+        }
+      }, speed);
+    };
+
+    if (startDelay > 0) {
+      timeoutId = setTimeout(startTyping, startDelay);
+    } else {
+      startTyping();
+    }
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [text, speed, startDelay]);
+
+  return <>{displayText}</>;
+});
 
 const Header = ({ data }) => {
   // Memoize social networks - must be called before any early returns
@@ -10,6 +58,7 @@ const Header = ({ data }) => {
 
   const { name, occupation, description, address } = data;
   const city = address?.city;
+  const headline = name ? `I'm ${name}.` : "";
 
   return (
     <header id="home">
@@ -58,7 +107,7 @@ const Header = ({ data }) => {
       <div className="row banner">
         <div className="banner-text">
           <h1 className="responsive-headline">
-            <TypeWriter typing={0.5}>{name ? `I'm ${name}.` : null}</TypeWriter>
+            <TypewriterText text={headline} speed={45} startDelay={150} />
           </h1>
           <h3>
             Based in {city}. <span>{occupation}</span>. {description}.
