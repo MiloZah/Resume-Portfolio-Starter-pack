@@ -9,9 +9,12 @@
     "react-dom": "^18.3.1",
     "react-scripts": "^5.0.1"
   },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
   "scripts": {
     "server": "node --env-file=.env server.js",
-    "start": "react-scripts start",
+    "start": "concurrently -k \"node --env-file=.env server.js\" \"react-scripts start\"",
     "build": "react-scripts build",
     "build:analyze": "npm run build && npx source-map-explorer 'build/static/js/*.js'",
     "test": "react-scripts test",

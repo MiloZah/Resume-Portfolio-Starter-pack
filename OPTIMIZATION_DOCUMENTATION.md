@@ -501,6 +501,27 @@ const Component = ({ data }) => {
 
 ---
 
+### 4. Contact API Mailer Reuse + Unified Dev Startup
+
+**Before:**
+- `npm start` only launched the React dev server; the API needed `npm run server`.
+- SMTP transport was created on every request.
+
+**After:**
+- `npm start` runs the API and React dev server together (via `concurrently`).
+- SMTP transport is created once and reused (lazy init) for faster requests.
+- Email validation uses a shared, precompiled regex.
+
+**Why:**
+- Reduce per-request overhead for the contact endpoint.
+- Simplify local development with a single startup command.
+
+**Benefits:**
+- Lower latency for repeated submissions.
+- Faster local iteration (one command to run both servers).
+
+---
+
 ## SEO Optimizations
 
 ### 1. Meta Tags (`public/index.html`)

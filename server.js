@@ -17,6 +17,8 @@ const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 5;
 const rateLimitStore = new Map();
 let lastCleanup = 0;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+let cachedTransporter = null;
 
 const app = express();
 
@@ -76,6 +78,29 @@ const checkRateLimit = (ip) => {
   return null;
 };
 
+const getTransporter = () => {
+  if (cachedTransporter) {
+    return { transporter: cachedTransporter };
+  }
+
+  const missingEnv = REQUIRED_ENV.filter((key) => !process.env[key]);
+  if (missingEnv.length) {
+    return { missingEnv };
+  }
+
+  cachedTransporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT || 587),
+    secure: process.env.SMTP_SECURE === "true",
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
+
+  return { transporter: cachedTransporter };
+};
+
 app.post("/api/contact", async (req, res) => {
   const origin = req.headers.origin;
   if (!isAllowedOrigin(origin)) {
@@ -111,8 +136,7 @@ app.post("/api/contact", async (req, res) => {
     return res.status(400).json({ ok: false, error: "Invalid field length." });
   }
 
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailPattern.test(trimmedEmail)) {
+  if (!EMAIL_PATTERN.test(trimmedEmail)) {
     return res.status(400).json({ ok: false, error: "Invalid email address." });
   }
 
@@ -124,21 +148,11 @@ app.post("/api/contact", async (req, res) => {
       .json({ ok: false, error: "Too many requests. Please try again later." });
   }
 
-  const missingEnv = REQUIRED_ENV.filter((key) => !process.env[key]);
-  if (missingEnv.length) {
-    console.error("Missing SMTP environment variables:", missingEnv.join(", "));
+  const { transporter, missingEnv } = getTransporter();
+  if (!transporter) {
+    console.error("Missing SMTP environment variables:", missingEnv?.join(", "));
     return res.status(500).json({ ok: false, error: "Email service not configured." });
   }
-
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT || 587),
-    secure: process.env.SMTP_SECURE === "true",
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
 
   try {
     await transporter.sendMail({
