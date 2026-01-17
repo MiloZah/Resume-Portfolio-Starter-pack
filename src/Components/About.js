@@ -42,7 +42,13 @@ const About = ({ data }) => {
             </div>
             <div className="columns download">
               <p>
-                <a href={resumeDownload} className="button" aria-label={`Download ${name}'s Resume`}>
+                <a
+                  href={resumeDownload}
+                  className="button"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Download ${name}'s Resume`}
+                >
                   <i className="fa fa-download"></i>Download Resume
                 </a>
               </p>
